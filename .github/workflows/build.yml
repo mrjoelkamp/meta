@@ -20,6 +20,9 @@ on:
           - '' # without this, it's technically "required" 🙃
           - 2022
           - 2019
+      sign:
+        type: boolean
+        default: false
 run-name: '${{ inputs.bashbrewArch }}: ${{ inputs.firstTag }} (${{ inputs.buildId }})'
 permissions:
   contents: read
@@ -138,6 +141,11 @@ jobs:
             eval "$bk"
           fi
           eval "$shell"
+      - name: Sign
+        if: inputs.sign
+        run: |
+          cd build
+          echo "sign attestations"
       - name: Push
         env:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
